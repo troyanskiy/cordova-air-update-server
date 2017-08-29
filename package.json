@@ -1,6 +1,6 @@
 {
   "name": "cordova-air-update-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "AirUupdate server part",
   "author": "Raman Rasliuk <roma@redbox.by>",
   "main": "./dist/index.js",
