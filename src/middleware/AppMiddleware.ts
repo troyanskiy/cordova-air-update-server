@@ -1,8 +1,10 @@
 import { NextFunction, Response } from 'express';
 
 import { IRequestSession, RequestHelper } from '../helpers/RequestHelper';
-import { App, AppModel, Channel, IChannel, IOwnerMeta } from '../models';
 import { AuthHelper } from '../helpers/AuthHelper';
+import { App, AppModel } from '../models/App';
+import { Channel, IChannel } from '../models/Channel';
+import { IOwnerMeta } from '../models/OwnerSchema';
 
 
 export class AppMiddleware {

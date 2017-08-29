@@ -5,13 +5,14 @@ import * as fs from 'fs-extra';
 import { NextFunction, Response } from 'express';
 
 import { IRequestSession } from '../helpers/RequestHelper';
-import { AppModel, Channel, IOwnerMeta, Version } from '../models';
 import { AuthHelper } from '../helpers/AuthHelper';
-import { ChannelModel } from '../models/Channel';
-import { VersionModel } from '../models/Version';
+import { Channel, ChannelModel } from '../models/Channel';
+import { Version, VersionModel } from '../models/Version';
 import { IAppConfig } from '../declarations';
 import { IZipFileEntry, ZipHelper } from '../helpers/ZipHelper';
 import { DeployerHelper } from '../helpers/DeployerHelper';
+import { IOwnerMeta } from '../models/OwnerSchema';
+import { AppModel } from '../models/App';
 
 
 export class DeployMiddleware {
