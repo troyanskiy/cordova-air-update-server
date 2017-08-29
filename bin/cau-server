@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const path = require('path');
+const programm = require('commander');
+const _ = require('lodash');
+const CAU = require('../dist/index');
+
+programm
+  .version('0.0.1')
+  .option('-c, --config <configPath>', 'Path to config file')
+  .parse(process.argv);
+
+const defConfig = {
+  mongo: {
+    server: 'mongodb://127.0.0.1/cau',
+    options: {
+      server: {
+        reconnectTries: 999999999999
+      }
+    }
+  },
+  apiServer: {
+    port: 3000,
+    apiPathPrefix: '/api'
+  }
+};
+
+let configPath = programm.config;
+
+if (!configPath) {
+  console.log('Please specify config file with -c --config');
+  process.exit(1);
+}
+
+configPath = configPath.startsWith('/') ? configPath : path.join(process.cwd(), configPath);
+
+let loadedConfig = null;
+
+try {
+  loadedConfig = require(configPath);
+} catch (err) {
+  console.log('Can not read config file ' + configPath);
+  process.exit(1);
+}
+
+_.defaultsDeep(loadedConfig, defConfig);
+
+
+
+
+new CAU.CordovaAirUpdateServer(loadedConfig).run();
