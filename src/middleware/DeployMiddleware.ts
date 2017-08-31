@@ -256,4 +256,5 @@ export class DeployMiddleware {
 interface ISignedData {
   version: string;
   filesMap: { [file: string]: string };
+  extras?: any;
 }
