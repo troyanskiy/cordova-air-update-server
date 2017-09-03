@@ -115,26 +115,41 @@ export class DeployMiddleware {
         return;
       }
 
+      let fromVersionDecodedData: ISignedData = null;
+      let fromVersionFileName: string = '';
+      if (req.query.from) {
+        const fromVersion = await DeployMiddleware.getVersion(channel, req.query.from);
+        if (fromVersion) {
+          fromVersionDecodedData = <ISignedData>JSON.parse(fromVersion.signedData);
+          fromVersionFileName = `D${fromVersionDecodedData.version}`;
+        }
+      }
+
+
       const config = <IAppConfig>res.locals.config;
 
       const versionDecodedData = <ISignedData>JSON.parse(version.signedData);
 
       const cacheDir = DeployerHelper.getAppPathChannel(config.pathCache, channel);
-      let zipFileName = `${cacheDir}/${versionDecodedData.version}.zip`;
+      let zipFileName = `${cacheDir}/${versionDecodedData.version}${fromVersionFileName}.zip`;
 
       if (!await fs.pathExists(zipFileName)) {
         const repoPath = DeployerHelper.getAppRepoPath(config.pathApps, channel);
 
-        const filesToZip: IZipFileEntry[] = Object.keys(versionDecodedData.filesMap).map((file: string) => {
+        const filesToZip: IZipFileEntry[] = Object.keys(versionDecodedData.filesMap)
+          .filter((file: string) => {
+            return !(fromVersionDecodedData && fromVersionDecodedData.filesMap[file] === versionDecodedData.filesMap[file]);
+          })
+          .map((file: string) => {
 
-          const fileName = versionDecodedData.filesMap[file];
+            const fileName = versionDecodedData.filesMap[file];
 
-          return {
-            src: repoPath + fileName,
-            dst: fileName
-          } as IZipFileEntry;
+            return {
+              src: repoPath + fileName,
+              dst: fileName
+            } as IZipFileEntry;
 
-        });
+          });
 
         await fs.ensureDir(cacheDir);
 
@@ -153,7 +168,6 @@ export class DeployMiddleware {
       res.sendStatus(500);
 
     }
-
 
 
   }
@@ -201,7 +215,6 @@ export class DeployMiddleware {
 
         return;
       }
-
 
 
       if (req.file) {
