@@ -16,6 +16,7 @@ import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { AuthApiRouter } from '../routes/AuthApiRouter';
 import { AppApiRouter } from '../routes/AppApiRouter';
 import { DeployApiRouter } from '../routes/DeployApiRouter';
+import { DeviceApiRouter } from '../routes/DeviceApiRouter';
 
 
 // Creates and configures an ExpressJS web server.
@@ -92,6 +93,7 @@ export class CordovaAirUpdateServer {
       .use('/auth', AuthApiRouter.getRouter())
       .use('/app', AppApiRouter.getRouter())
       .use('/deploy', DeployApiRouter.getRouter(this.config))
+      .use('/device', DeviceApiRouter.getRouter())
     ;
 
     this.express.use(this.getPathPrefix(), this.router);

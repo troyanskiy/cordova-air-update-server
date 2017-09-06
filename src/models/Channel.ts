@@ -3,6 +3,7 @@ import { Mongoose } from '../system/mongoose';
 import { VersionModel } from './Version';
 import { IOwnerMeta, ownerSchema } from './OwnerSchema';
 import { AppModel } from './App';
+import { DeviceModel } from './Device';
 
 const ObjectId = Schema.Types.ObjectId;
 
@@ -21,6 +22,8 @@ export interface IChannel extends Document {
   versions?: string[] | VersionModel[];
   latestVersion?: string | VersionModel;
 
+  devices?: string[] | DeviceModel[];
+
 }
 
 const channelSchema = new Schema({
@@ -37,7 +40,9 @@ const channelSchema = new Schema({
   owners: [ownerSchema],
 
   versions: [{type: ObjectId, ref: 'Version'}],
-  latestVersion: {type: ObjectId, ref: 'Version'}
+  latestVersion: {type: ObjectId, ref: 'Version'},
+
+  devices: [{type: ObjectId, ref: 'Device'}]
 
 });
 
