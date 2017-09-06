@@ -17,6 +17,8 @@ import { AuthApiRouter } from '../routes/AuthApiRouter';
 import { AppApiRouter } from '../routes/AppApiRouter';
 import { DeployApiRouter } from '../routes/DeployApiRouter';
 import { DeviceApiRouter } from '../routes/DeviceApiRouter';
+import { UserHelper } from '../helpers/UserHelper';
+import { IUser } from '../models/User';
 
 
 // Creates and configures an ExpressJS web server.
@@ -41,6 +43,23 @@ export class CordovaAirUpdateServer {
   }
 
   run(): Server {
+
+    if (this.config.createUser) {
+      // just wait for DB connection
+      console.log('Going to create new user. Just waiting 1 sec DB connection');
+      setTimeout(() => {
+        UserHelper.createUser(this.config.createUser.user, this.config.createUser.password)
+          .then((user: IUser) => {
+            console.log(`User has been created ${user.login} : ${user.password}`);
+          })
+          .catch((err: Error) => {
+            console.warn('User was not created');
+            console.warn(err);
+          });
+      }, 1000);
+
+      return null;
+    }
 
     if (this.server) {
       return this.server;

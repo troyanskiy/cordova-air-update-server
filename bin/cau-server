@@ -8,8 +8,10 @@ const _ = require('lodash');
 const CAU = require('../dist/index');
 
 programm
-  .version('0.0.1')
+  .version('0.0.6')
   .option('-c, --config <configPath>', 'Path to config file')
+  .option('-u, --user <userName>', 'User name to create')
+  .option('-p, --password <password>', 'Users password')
   .parse(process.argv);
 
 const defConfig = {
@@ -47,6 +49,13 @@ try {
 
 _.defaultsDeep(loadedConfig, defConfig);
 
+
+if (programm.user && programm.password && programm.user.trim() && programm.password.trim()) {
+  loadedConfig.createUser = {
+    user: programm.user,
+    password: programm.password
+  };
+}
 
 
 

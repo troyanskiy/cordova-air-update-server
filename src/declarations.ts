@@ -6,6 +6,10 @@ export interface IAppConfig {
   pathTemp?: string;
   pathCache?: string;
   mongo: IMongoConfig;
+  createUser?: {
+    user: string;
+    password: string;
+  };
 }
 
 export interface IApiServerConfig {

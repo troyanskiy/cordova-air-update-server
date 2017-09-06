@@ -1,8 +1,6 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { NextFunction, Response, Router } from 'express';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { DataCheckDataType, IRequestSession, RequestHelper } from '../helpers/RequestHelper';
-import { User } from '../models/User';
-import { AuthHelper } from '../helpers/AuthHelper';
 
 export class AuthApiRouter {
 
@@ -45,28 +43,24 @@ export class AuthApiRouter {
         (req: IRequestSession, res: Response, next: NextFunction) => AuthMiddleware.logoutMain(req, res)
       ])
 
-      .post('/create', async (req: Request, res: Response) => {
-
-        const data = req.body;
-
-        if (!data.login || !data.password) {
-          res.sendStatus(400);
-
-          return;
-        }
-
-        const user = new User();
-
-        user.login = data.login;
-        user.password = await AuthHelper.hashPassword(data.password);
-
-        await user.save();
-
-        console.log(`Created user with ${user._id}`);
-
-
-        res.sendStatus(200);
-      });
+      // .post('/create', async (req: Request, res: Response) => {
+      //
+      //   const data = req.body;
+      //
+      //   if (!data.login || !data.password) {
+      //     res.sendStatus(400);
+      //
+      //     return;
+      //   }
+      //
+      //   const user = await UserHelper.createUser(data.login, data.password);
+      //
+      //   console.log(`Created user with ${user._id}`);
+      //
+      //
+      //   res.sendStatus(200);
+      // })
+    ;
   }
 
 }
